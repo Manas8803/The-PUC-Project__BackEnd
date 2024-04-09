@@ -12,10 +12,6 @@ use ./reg_expiration_job-service
 
 use ./puc_expiry_warner-service
 
-use ./broadcast
-
-use ./deploy-websocket
-
-use ./connect
-
 use ./auth-service
+
+use ./websocket

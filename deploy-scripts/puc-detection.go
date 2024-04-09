@@ -134,6 +134,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		FunctionName: jsii.String("PUC-Detection-OCR-Lambda"),
 	})
 
+	//^ Auth handler
 	auth_handler := awslambda.NewFunction(stack, jsii.String("auth-service"), &awslambda.FunctionProps{
 		Code:    awslambda.Code_FromAsset(jsii.String("../auth-service"), nil),
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
@@ -152,6 +153,46 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Auth"), &awsapigateway.LambdaRestApiProps{
 		Handler: auth_handler,
+	})
+
+	//~ WEBSOCKET API :
+	//^ Broadcast Route
+	awslambda.NewFunction(stack, jsii.String("BroadCast-Lambda"), &awslambda.FunctionProps{
+		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/broadcast"), nil),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Handler: jsii.String("main"),
+		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
+		Environment: &map[string]*string{
+			"REGION": jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+		},
+		FunctionName: jsii.String("BroadCast-Lambda"),
+		Role:         roles.CreateWebSocketLambdaRole(stack, "BroadCast"),
+	})
+
+	//^ Connect Route
+	awslambda.NewFunction(stack, jsii.String("Connect-Lambda"), &awslambda.FunctionProps{
+		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/connect"), nil),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Handler: jsii.String("main"),
+		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
+		Environment: &map[string]*string{
+			"REGION": jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+		},
+		FunctionName: jsii.String("Connect-Lambda"),
+		Role:         roles.CreateWebSocketLambdaRole(stack, "Connect"),
+	})
+
+	//^ Disconnect Route
+	awslambda.NewFunction(stack, jsii.String("Disconnect-Lambda"), &awslambda.FunctionProps{
+		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/disconnect"), nil),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Handler: jsii.String("main"),
+		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
+		Environment: &map[string]*string{
+			"REGION": jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+		},
+		FunctionName: jsii.String("Disconnect-Lambda"),
+		Role:         roles.CreateWebSocketLambdaRole(stack, "Disconnect"),
 	})
 
 	return stack
