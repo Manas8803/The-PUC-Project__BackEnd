@@ -26,4 +26,6 @@ cdk.out
 ./ocr-service/bootstrap
 ./vrc-service/bootstrap
 ./reg_renewal_reminder-service/bootstrap
-./deploy-scripts/zip
+./deploy-scripts/zip/connect.zip
+./deploy-scripts/zip/disconnect.zip
+./deploy-scripts/zip/report-authority.zip
