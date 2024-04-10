@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -15,6 +16,8 @@ import (
 	"github.com/aws/jsii-runtime-go"
 	"github.com/joho/godotenv"
 )
+
+var stack_name = "PUC-Detection"
 
 type PucDetectionStackProps struct {
 	awscdk.StackProps
@@ -33,7 +36,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			Name: jsii.String("reg_no"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String("PUC-Detection-vehicle-table"),
+		TableName: jsii.String(fmt.Sprintf("%s-vehicle-table", stack_name)),
 	})
 
 	//^ User-TABLE
@@ -156,27 +159,15 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	})
 
 	//~ WEBSOCKET API :
-	//^ Broadcast Route
-	awslambda.NewFunction(stack, jsii.String("BroadCast-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/broadcast"), nil),
-		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
-		Handler: jsii.String("main"),
-		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Environment: &map[string]*string{
-			"REGION": jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-		},
-		FunctionName: jsii.String("BroadCast-Lambda"),
-		Role:         roles.CreateWebSocketLambdaRole(stack, "BroadCast"),
-	})
-
 	//^ Connect Route
 	awslambda.NewFunction(stack, jsii.String("Connect-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/connect"), nil),
-		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
-		Handler: jsii.String("main"),
+		Code:    awslambda.Code_FromAsset(jsii.String("./zip/connect.zip"), nil),
+		Runtime: awslambda.Runtime_NODEJS_20_X(),
+		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
-			"REGION": jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
 		FunctionName: jsii.String("Connect-Lambda"),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Connect"),
@@ -184,19 +175,33 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	//^ Disconnect Route
 	awslambda.NewFunction(stack, jsii.String("Disconnect-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/disconnect"), nil),
-		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
-		Handler: jsii.String("main"),
+		Code:    awslambda.Code_FromAsset(jsii.String("./zip/disconnect.zip"), nil),
+		Runtime: awslambda.Runtime_NODEJS_20_X(),
+		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
-			"REGION": jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
 		FunctionName: jsii.String("Disconnect-Lambda"),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Disconnect"),
 	})
 
-	return stack
+	//^ Report Authority Route
+	awslambda.NewFunction(stack, jsii.String("Report-Authority-Lambda"), &awslambda.FunctionProps{
+		Code:    awslambda.Code_FromAsset(jsii.String("./zip/report-authority.zip"), nil),
+		Runtime: awslambda.Runtime_NODEJS_20_X(),
+		Handler: jsii.String("index.handler"),
+		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
+		Environment: &map[string]*string{
+			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
+		},
+		FunctionName: jsii.String("Report-Authority-Lambda"),
+		Role:         roles.CreateWebSocketLambdaRole(stack, "Report-Authority"),
+	})
 
+	return stack
 }
 
 func main() {

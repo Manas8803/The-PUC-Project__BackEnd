@@ -13,5 +13,3 @@ use ./reg_expiration_job-service
 use ./puc_expiry_warner-service
 
 use ./auth-service
-
-use ./websocket
