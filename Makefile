@@ -5,9 +5,9 @@ build:
 	GOOS=linux GOARCH=amd64 go build -o ./vrc-service/bootstrap ./vrc-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./reg_renewal_reminder-service/bootstrap ./reg_renewal_reminder-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./reg_expiration_job-service/bootstrap ./reg_expiration_job-service/cmd/main.go
-	cd websocket && zip -r ../deploy-scripts/zip/connect.zip connect
-	cd websocket && zip -r ../deploy-scripts/zip/disconnect.zip disconnect
-	cd websocket && zip -r ../deploy-scripts/zip/report-authority.zip report-authority
+	cd websocket/connect && zip ../../deploy-scripts/zip/connect.zip index.js
+	cd websocket/disconnect && zip ../../deploy-scripts/zip/disconnect.zip index.js
+	cd websocket/report-authority && zip ../../deploy-scripts/zip/report-authority.zip index.js
 
 deploy:
 	cd deploy-scripts && cdk deploy

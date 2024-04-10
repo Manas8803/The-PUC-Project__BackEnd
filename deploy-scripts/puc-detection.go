@@ -45,12 +45,12 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			Name: jsii.String("email"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String("PUC-Detection-user-table-1"),
+		TableName: jsii.String(fmt.Sprintf("%s-user-table", stack_name)),
 	})
 
 	//^ Log group of vrc handler
 	logGroup_vrc := awslogs.NewLogGroup(stack, jsii.String("VRC-LogGroup"), &awslogs.LogGroupProps{
-		LogGroupName:  jsii.String("/aws/lambda/PucDetectionStack-VRC"),
+		LogGroupName:  jsii.String(fmt.Sprintf("/aws/lambda/%s-VRC", stack_name)),
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
@@ -66,13 +66,13 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"API_KEY":           jsii.String(os.Getenv("API_KEY")),
 			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),
 		},
-		FunctionName: jsii.String("PUC-Detection-VRC-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-VRC-Lambda", stack_name)),
 		LogGroup:     logGroup_vrc,
 	})
 
 	//^ Log group of reg_ex_cron_job handler
 	logGroup_reg_ex := awslogs.NewLogGroup(stack, jsii.String("RegExpCronJob-LogGroup"), &awslogs.LogGroupProps{
-		LogGroupName:  jsii.String("/aws/lambda/PucDetectionStack-RegExCronJob"),
+		LogGroupName:  jsii.String(fmt.Sprintf("/aws/lambda/%s-RegExpCronJob", stack_name)),
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
@@ -88,7 +88,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),
 			"VRC_HANDLER_ARN":   jsii.String(*vrc_handler.FunctionArn()),
 		},
-		FunctionName: jsii.String("PUC-Detection-RegExp-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-RegExp-Lambda", stack_name)),
 		LogGroup:     logGroup_reg_ex,
 	})
 
@@ -96,7 +96,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	//^ Log group of reg_renewal_reminder handler
 	logGroup_reg := awslogs.NewLogGroup(stack, jsii.String("Reg_Renewal_Reminder-LogGroup"), &awslogs.LogGroupProps{
-		LogGroupName:  jsii.String("/aws/lambda/PucDetectionStack-Reg_Renewal_Reminder"),
+		LogGroupName:  jsii.String(fmt.Sprintf("/aws/lambda/%s-Reg_Renewal_Reminder", stack_name)),
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
@@ -112,13 +112,13 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"VRC_HANDLER_ARN":   jsii.String(*vrc_handler.FunctionArn()),
 			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),
 		},
-		FunctionName: jsii.String("PUC-Detection-Reg_Renewal_Reminder-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-Reg_Renewal_Reminder-Lambda", stack_name)),
 		LogGroup:     logGroup_reg,
 	})
 
 	//^ Log group of ocr handler
 	logGroup_ocr := awslogs.NewLogGroup(stack, jsii.String("OCR-Lambda-LogGroup"), &awslogs.LogGroupProps{
-		LogGroupName:  jsii.String("/aws/lambda/PucDetectionStack-OCRLambda"),
+		LogGroupName:  jsii.String(fmt.Sprintf("/aws/lambda/%s-OCR", stack_name)),
 		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
 	})
 
@@ -134,7 +134,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"REG_RENEWAL_ARN": jsii.String(*reg_renewal_reminder_handler.FunctionArn()),
 		},
 		LogGroup:     logGroup_ocr,
-		FunctionName: jsii.String("PUC-Detection-OCR-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-OCR-Lambda", stack_name)),
 	})
 
 	//^ Auth handler
@@ -151,7 +151,8 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"ADMIN":          jsii.String(os.Getenv("ADMIN")),
 			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
-		Role: roles.CreateDbRole(stack, user_table),
+		Role:         roles.CreateDbRole(stack, user_table),
+		FunctionName: jsii.String(fmt.Sprintf("%s-Auth-Lambda", stack_name)),
 	})
 
 	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Auth"), &awsapigateway.LambdaRestApiProps{
@@ -162,42 +163,42 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	//^ Connect Route
 	awslambda.NewFunction(stack, jsii.String("Connect-Lambda"), &awslambda.FunctionProps{
 		Code:    awslambda.Code_FromAsset(jsii.String("./zip/connect.zip"), nil),
-		Runtime: awslambda.Runtime_NODEJS_20_X(),
+		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
-		FunctionName: jsii.String("Connect-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-Connect-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Connect"),
 	})
 
 	//^ Disconnect Route
 	awslambda.NewFunction(stack, jsii.String("Disconnect-Lambda"), &awslambda.FunctionProps{
 		Code:    awslambda.Code_FromAsset(jsii.String("./zip/disconnect.zip"), nil),
-		Runtime: awslambda.Runtime_NODEJS_20_X(),
+		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
-		FunctionName: jsii.String("Disconnect-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-Disconnect-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Disconnect"),
 	})
 
 	//^ Report Authority Route
 	awslambda.NewFunction(stack, jsii.String("Report-Authority-Lambda"), &awslambda.FunctionProps{
 		Code:    awslambda.Code_FromAsset(jsii.String("./zip/report-authority.zip"), nil),
-		Runtime: awslambda.Runtime_NODEJS_20_X(),
+		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
-		FunctionName: jsii.String("Report-Authority-Lambda"),
+		FunctionName: jsii.String(fmt.Sprintf("%s-Report-Authority-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Report-Authority"),
 	})
 
