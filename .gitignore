@@ -20,12 +20,12 @@ cdk.out
 
 # Service realted assets
 .env
-./ocr-service/pkg/test-images
-./ocr-service/pkg/lib/image/image_test.go
-./ocr-service/pkg/results/
-./ocr-service/bootstrap
-./vrc-service/bootstrap
-./reg_renewal_reminder-service/bootstrap
-./deploy-scripts/zip/connect.zip
-./deploy-scripts/zip/disconnect.zip
-./deploy-scripts/zip/report-authority.zip
+ocr-service/pkg/test-images
+ocr-service/pkg/lib/image/image_test.go
+ocr-service/pkg/results/
+ocr-service/bootstrap
+vrc-service/bootstrap
+reg_renewal_reminder-service/bootstrap
+deploy-scripts/zip/connect.zip
+deploy-scripts/zip/disconnect.zip
+deploy-scripts/zip/report-authority.zip
