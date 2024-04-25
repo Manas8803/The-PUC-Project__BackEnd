@@ -18,11 +18,15 @@
 .cdk.staging
 cdk.out
 
-# Service realted assets
+# Environment
 .env
+
+# Service realted assets
 ocr-service/pkg/test-images
 ocr-service/pkg/lib/image/image_test.go
 ocr-service/pkg/results/
+ocr-service/pkg/lib/image/test-images 
+ocr-service/pkg/lib/image/tmp
 
 # Zip files
 deploy-scripts/zip/connect.zip
