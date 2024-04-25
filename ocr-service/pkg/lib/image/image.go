@@ -55,9 +55,6 @@ func (img *Image) DecodeAndSaveImage() error {
 		return err
 	}
 
-	// Ensure the /tmp directory exists (it should by default on AWS Lambda)
-	// No need to create it, but you might want to check or clean it before saving new files
-
 	// Create the file in the /tmp directory
 	fileName := strings.TrimSpace(img.ImageName)
 	if fileName == "" {
@@ -86,6 +83,6 @@ func (img *Image) DecodeAndSaveImage() error {
 		return err
 	}
 
-	log.Printf("Image saved to %s\n", filePath)
+	log.Println("Image saved to ", filePath)
 	return nil
 }

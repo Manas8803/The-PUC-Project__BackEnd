@@ -3,7 +3,6 @@ package image
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os"
 	"testing"
 
@@ -12,30 +11,31 @@ import (
 )
 
 func TestImage_FromJson(t *testing.T) {
-	requestBody := fmt.Sprintf(`{"image_name": "imageobject0_1.jpg", "image_bytes": "%s"}`, TestImg)
+	requestBody := fmt.Sprintf(`{"image_name": "imageobject0_1.jpg", "image_bytes": "%s"}`, TestImgBytes)
 	req := events.APIGatewayProxyRequest{
 		Body: requestBody,
 	}
 
 	expected := &Image{
 		ImageName:  "imageobject0_1.jpg",
-		ImageBytes: TestImg,
+		ImageBytes: TestImgBytes,
 	}
 
 	// Image object to test
 	img := &Image{}
+	t.Log("IN TestImage")
 
 	// Call FromJson
 	err := img.FromJson(&req)
-	log.Println("Image : ", img)
+	t.Log("Image : ", img)
 
 	// Assertions
 	assert.Nil(t, err)
 	assert.Equal(t, expected, img)
 }
 
-func TestProcessExistingImage(t *testing.T) {
-	imagePath := "/Users/ManasSaha/Desktop/My/Programming/Projects/Puc-Detection/ocr-service/pkg/test-images/imageobject0_0.jpg"
+func TestImage_DecodeAndSaveImage(t *testing.T) {
+	imagePath := "./test-images/img1object0_0.jpg"
 
 	file, err := os.Open(imagePath)
 	if err != nil {
@@ -49,7 +49,7 @@ func TestProcessExistingImage(t *testing.T) {
 		t.Fatalf("Failed to read test image: %v", err)
 	}
 
-	imgBase64Str := TestImg
+	imgBase64Str := TestImgBytes
 
 	testImage := Image{
 		ImageName:  "new-image.jpg",
@@ -61,8 +61,10 @@ func TestProcessExistingImage(t *testing.T) {
 		t.Errorf("DecodeAndSaveImage() returned an error: %v", err)
 	}
 
-	filePath := "/Users/ManasSaha/Desktop/My/Programming/Projects/Puc-Detection/ocr-service/pkg/test-images/imageobject0_0.jpg"
+	filePath := "./test-images/img1object0_0.jpg"
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		t.Errorf("Expected file %s to exist", filePath)
 	}
+
+	assert.Nil(t, err)
 }
