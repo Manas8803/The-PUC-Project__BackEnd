@@ -113,17 +113,17 @@ jobs:
           name: ocr-service
           path: ./ocr-service
 
-      - name: Download Puc_Expiry_Warner Service Build
-        uses: actions/download-artifact@v3
-        with:
-          name: puc_expiry_warner-service
-          path: ./puc_expiry_warner-service
-
-      # - name: Download Reg_Expiration_Job Service Build
+      # - name: Download Puc_Expiry_Warner Service Build
       #   uses: actions/download-artifact@v3
       #   with:
-      #     name: email-service
-      #     path: ./email-service
+      #     name: puc_expiry_warner-service
+      #     path: ./puc_expiry_warner-service
+
+      - name: Download Reg_Expiration_Job Service Build
+        uses: actions/download-artifact@v3
+        with:
+          name: reg_expiration_job-service
+          path: ./reg_expiration_job-service
 
       - name: Download Reg_Expiration_Job Service Build
         uses: actions/download-artifact@v3
