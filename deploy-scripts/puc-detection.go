@@ -148,6 +148,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"JWT_LIFETIME":   jsii.String(os.Getenv("JWT_LIFETIME")),
 			"EMAIL":          jsii.String(os.Getenv("EMAIL")),
 			"PASSWORD":       jsii.String(os.Getenv("PASSWORD")),
+			"RELEASE_MODE":       jsii.String(os.Getenv("RELEASE_MODE")),
 			"ADMIN":          jsii.String(os.Getenv("ADMIN")),
 			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},

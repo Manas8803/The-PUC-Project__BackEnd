@@ -34,7 +34,6 @@ func init() {
 	//* Passing the router to all user(auth-service) routes.
 	routes.UserRoute(api)
 
-	//* Connecting to DB
 	ginLambda = ginadapter.New(router)
 }
 

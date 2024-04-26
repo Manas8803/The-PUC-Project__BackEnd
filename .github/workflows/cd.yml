@@ -1,28 +1,168 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: Puc-Detection pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21.3"
+      - name: Build
+        run: make build
+      - name: Upload Auth Service Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: auth-service
+          path: ./auth-service/bootstrap
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.20'
+      - name: Upload OCR Service Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ocr-service
+          path: ./ocr-service/bootstrap
 
-    - name: Build
-      run: go build -v ./...
+      # - name: Upload PUC_Expiry_Warner Service Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: puc_expiry_warner-service-service
+      #     path: ./puc_expiry_warner-service-service/bootstrap
 
-    - name: Test
-      run: go test -v ./...
+      - name: Upload Reg_Expiration_Job Service Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: reg_expiration_job-service
+          path: ./reg_expiration_job-service/bootstrap
+
+      - name: Upload Reg_Renewal_Reminder Service Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: reg_renewal_reminder-service
+          path: ./reg_renewal_reminder-service/bootstrap
+
+      - name: Upload VRC Service Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: vrc-service
+          path: ./vrc-service/bootstrap
+
+      - name: Upload Websocket-Connect Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: websocket-connect
+          path: ./deploy-scripts/zip/connect.zip
+
+      - name: Upload Websocket-Connect Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: websocket-disconnect
+          path: ./deploy-scripts/zip/disconnect.zip
+
+      - name: Upload Websocket-Report-Authority Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: websocket-report-authority
+          path: ./deploy-scripts/zip/report-authority.zip
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
+      CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
+      RELEASE_MODE: ${{ secrets.RELEASE_MODE }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_LIFETIME: ${{ secrets.JWT_LIFETIME }}
+      EMAIL: ${{ secrets.EMAIL }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      ADMIN: ${{ secrets.ADMIN }}
+      SEND_TO_EMAIL_ARN: ${{ secrets.SEND_TO_EMAIL_ARN }}
+      PORT: ${{ secrets.PORT }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      - name: Install AWS CDK
+        run: |
+          npm install -g aws-cdk
+
+      - name: Download Auth Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: auth-service
+          path: ./auth-service
+
+      - name: Download OCR Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ocr-service
+          path: ./ocr-service
+
+      - name: Download Puc_Expiry_Warner Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: puc_expiry_warner-service
+          path: ./puc_expiry_warner-service
+
+      # - name: Download Reg_Expiration_Job Service Artifact
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: email-service
+      #     path: ./email-service
+
+      - name: Download Reg_Expiration_Job Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: reg_expiration_job-service
+          path: ./reg_expiration_job-service
+
+      - name: Download Reg_Renewal_Reminder Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: reg_renenwal_reminder-service
+          path: ./reg_renenwal_reminder-service
+
+      - name: Download VRC Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: vrc-service
+          path: ./vrc-service
+
+      - name: Download Websocket-Connect Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: websocket-connect
+          path: ./deploy-scripts/zip/connect.zip
+
+      - name: Download Websocket-Disconnect Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: websocket-disconnect
+          path: ./deploy-scripts/zip/disconnect.zip
+
+      - name: Download Websocket-Report-Authority Service Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: websocket-report-authority
+          path: ./deploy-scripts/zip/report-authority.zip
+
+      - name: CDK Deploy
+        working-directory: deploy-scripts
+        run: cdk deploy
