@@ -17,55 +17,55 @@ jobs:
           go-version: "1.21.3"
       - name: Build
         run: make build
-      - name: Upload Auth Service Artifact
+      - name: Upload Auth Service Build
         uses: actions/upload-artifact@v3
         with:
           name: auth-service
           path: ./auth-service/bootstrap
 
-      - name: Upload OCR Service Artifact
+      - name: Upload OCR Service Build
         uses: actions/upload-artifact@v3
         with:
           name: ocr-service
           path: ./ocr-service/bootstrap
 
-      # - name: Upload PUC_Expiry_Warner Service Artifact
+      # - name: Upload PUC_Expiry_Warner Service Build
       #   uses: actions/upload-artifact@v3
       #   with:
       #     name: puc_expiry_warner-service-service
       #     path: ./puc_expiry_warner-service-service/bootstrap
 
-      - name: Upload Reg_Expiration_Job Service Artifact
+      - name: Upload Reg_Expiration_Job Service Build
         uses: actions/upload-artifact@v3
         with:
           name: reg_expiration_job-service
           path: ./reg_expiration_job-service/bootstrap
 
-      - name: Upload Reg_Renewal_Reminder Service Artifact
+      - name: Upload Reg_Renewal_Reminder Service Build
         uses: actions/upload-artifact@v3
         with:
           name: reg_renewal_reminder-service
           path: ./reg_renewal_reminder-service/bootstrap
 
-      - name: Upload VRC Service Artifact
+      - name: Upload VRC Service Build
         uses: actions/upload-artifact@v3
         with:
           name: vrc-service
           path: ./vrc-service/bootstrap
 
-      - name: Upload Websocket-Connect Artifact
+      - name: Upload Websocket-Connect Build
         uses: actions/upload-artifact@v3
         with:
           name: websocket-connect
           path: ./deploy-scripts/zip/connect.zip
 
-      - name: Upload Websocket-Connect Artifact
+      - name: Upload Websocket-Connect Build
         uses: actions/upload-artifact@v3
         with:
           name: websocket-disconnect
           path: ./deploy-scripts/zip/disconnect.zip
 
-      - name: Upload Websocket-Report-Authority Artifact
+      - name: Upload Websocket-Report-Authority Build
         uses: actions/upload-artifact@v3
         with:
           name: websocket-report-authority
@@ -103,61 +103,61 @@ jobs:
         run: |
           npm install -g aws-cdk
 
-      - name: Download Auth Service Artifact
+      - name: Download Auth Service Build
         uses: actions/download-artifact@v3
         with:
           name: auth-service
           path: ./auth-service
 
-      - name: Download OCR Service Artifact
+      - name: Download OCR Service Build
         uses: actions/download-artifact@v3
         with:
           name: ocr-service
           path: ./ocr-service
 
-      - name: Download Puc_Expiry_Warner Service Artifact
+      - name: Download Puc_Expiry_Warner Service Build
         uses: actions/download-artifact@v3
         with:
           name: puc_expiry_warner-service
           path: ./puc_expiry_warner-service
 
-      # - name: Download Reg_Expiration_Job Service Artifact
+      # - name: Download Reg_Expiration_Job Service Build
       #   uses: actions/download-artifact@v3
       #   with:
       #     name: email-service
       #     path: ./email-service
 
-      - name: Download Reg_Expiration_Job Service Artifact
+      - name: Download Reg_Expiration_Job Service Build
         uses: actions/download-artifact@v3
         with:
           name: reg_expiration_job-service
           path: ./reg_expiration_job-service
 
-      - name: Download Reg_Renewal_Reminder Service Artifact
+      - name: Download Reg_Renewal_Reminder Service Build
         uses: actions/download-artifact@v3
         with:
           name: reg_renenwal_reminder-service
           path: ./reg_renenwal_reminder-service
 
-      - name: Download VRC Service Artifact
+      - name: Download VRC Service Build
         uses: actions/download-artifact@v3
         with:
           name: vrc-service
           path: ./vrc-service
 
-      - name: Download Websocket-Connect Service Artifact
+      - name: Download Websocket-Connect Service Build
         uses: actions/download-artifact@v3
         with:
           name: websocket-connect
           path: ./deploy-scripts/zip/connect.zip
 
-      - name: Download Websocket-Disconnect Service Artifact
+      - name: Download Websocket-Disconnect Service Build
         uses: actions/download-artifact@v3
         with:
           name: websocket-disconnect
           path: ./deploy-scripts/zip/disconnect.zip
 
-      - name: Download Websocket-Report-Authority Service Artifact
+      - name: Download Websocket-Report-Authority Service Build
         uses: actions/download-artifact@v3
         with:
           name: websocket-report-authority
