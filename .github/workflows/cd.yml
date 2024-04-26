@@ -125,17 +125,11 @@ jobs:
           name: reg_expiration_job-service
           path: ./reg_expiration_job-service
 
-      - name: Download Reg_Expiration_Job Service Build
-        uses: actions/download-artifact@v3
-        with:
-          name: reg_expiration_job-service
-          path: ./reg_expiration_job-service
-
       - name: Download Reg_Renewal_Reminder Service Build
         uses: actions/download-artifact@v3
         with:
-          name: reg_renenwal_reminder-service
-          path: ./reg_renenwal_reminder-service
+          name: reg_renewal_reminder-service
+          path: ./reg_renewal_reminder-service
 
       - name: Download VRC Service Build
         uses: actions/download-artifact@v3
