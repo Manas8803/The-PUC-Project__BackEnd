@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	event "github.com/Manas8803/puc-detection/deploy-scripts/events"
@@ -14,7 +13,6 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
-	"github.com/joho/godotenv"
 )
 
 var stack_name = "PUC-Detection"
@@ -223,10 +221,10 @@ func main() {
 
 func env() *awscdk.Environment {
 
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Fatalln("Error loading .env file : ", err)
-	}
+	// err := godotenv.Load("../.env")
+	// if err != nil {
+	// 	log.Fatalln("Error loading .env file : ", err)
+	// }
 
 	return &awscdk.Environment{
 		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
