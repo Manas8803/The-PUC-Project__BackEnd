@@ -190,7 +190,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	//^ Report Authority Route
 	awslambda.NewFunction(stack, jsii.String("Report-Authority-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String(".../websocket/report-authority"), nil),
+		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/report-authority"), nil),
 		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
