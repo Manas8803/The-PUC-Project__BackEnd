@@ -37,3 +37,5 @@ deploy-scripts/zip/report-authority.zip
 ocr-service/bootstrap
 vrc-service/bootstrap
 reg_renewal_reminder-service/bootstrap
+
+.DS_Store
