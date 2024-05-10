@@ -162,7 +162,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	//~ WEBSOCKET API :
 	//^ Connect Route
 	awslambda.NewFunction(stack, jsii.String("Connect-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("./zip/connect.zip"), nil),
+		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/connect"), nil),
 		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
@@ -176,7 +176,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	//^ Disconnect Route
 	awslambda.NewFunction(stack, jsii.String("Disconnect-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("./zip/disconnect.zip"), nil),
+		Code:    awslambda.Code_FromAsset(jsii.String("../websocket/disconnect"), nil),
 		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
@@ -190,7 +190,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	//^ Report Authority Route
 	awslambda.NewFunction(stack, jsii.String("Report-Authority-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("./zip/report-authority.zip"), nil),
+		Code:    awslambda.Code_FromAsset(jsii.String(".../websocket/report-authority"), nil),
 		Runtime: awslambda.Runtime_NODEJS_16_X(),
 		Handler: jsii.String("index.handler"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
