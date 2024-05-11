@@ -46,16 +46,16 @@ func parseDate(dateStr string) (*Date, error) {
 }
 
 type Vehicle struct {
-	OwnerName        string
-	OfficeName       string
-	RegNo            string
-	VehicleClassDesc string
-	Model            string
-	RegUpto          *Date
-	VehicleType      string
-	Mobile           int64
-	PucUpto          *Date
-	LastCheckDate    *Date
+	OwnerName        string `json:"owner_name"`
+	OfficeName       string `json:"office_name"`
+	RegNo            string `json:"reg_no"`
+	VehicleClassDesc string `json:"vehicle_class_desc"`
+	Model            string `json:"model"`
+	RegUpto          *Date  `json:"reg_upto"`
+	VehicleType      string `json:"vehicle_type"`
+	Mobile           int64  `json:"mobile"`
+	PucUpto          *Date  `json:"puc_upto"`
+	LastCheckDate    *Date  `json:"last_check_date"`
 }
 
 func (v *Vehicle) FromJson(data []byte) error {

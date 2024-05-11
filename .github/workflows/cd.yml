@@ -65,6 +65,7 @@ jobs:
       PASSWORD: ${{ secrets.PASSWORD }}
       RELEASE_MODE: ${{ secrets.RELEASE_MODE }}
       ADMIN: ${{ secrets.ADMIN }}
+      REPORT_WEBSOCKET_URL: ${{ secrets.REPORT_WEBSOCKET_URL }}
 
     steps:
       - uses: actions/checkout@v3

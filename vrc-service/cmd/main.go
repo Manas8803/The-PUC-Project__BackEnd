@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/lib/api"
+	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/lib/socket"
 	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/lib/util"
 	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/models/service"
 	"github.com/aws/aws-lambda-go/events"
@@ -30,6 +31,7 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		log.Println("Error in unmarshalling data : ", err)
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, nil
 	}
+
 	//* Make API call
 	vehicle, err := api.GetVehicleInfoByRegNo(data.RegNo)
 	if err != nil {
@@ -60,6 +62,10 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	if is_puc_exp {
 		//	//TODO :IF YES, Trigger WEBSOCKET API
 		log.Println("Invoking WEBSOCKET API...")
+		reportErr := socket.ReportAuthority(vehicle)
+		if reportErr != nil {
+			return events.APIGatewayProxyResponse{Body: reportErr.Error(), StatusCode: http.StatusInternalServerError}, err
+		}
 		wg.Wait()
 		return events.APIGatewayProxyResponse{Body: "Successfully invoked WEBSOCKET API", StatusCode: http.StatusOK}, nil
 	}
