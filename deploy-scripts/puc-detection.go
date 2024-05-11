@@ -29,21 +29,21 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	stack := awscdk.NewStack(scope, &id, &sprops)
 
 	//^ Vehicle-TABLE
-	vehicle_table := dynamodb.NewTable(stack, jsii.String("vehicle-table"), &dynamodb.TableProps{
+	vehicle_table := dynamodb.NewTable(stack, jsii.String(fmt.Sprintf("%s-vehicle-table", stack_name)), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{
-			Name: jsii.String("office_name"),
+			Name: jsii.String("reg_no"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String(fmt.Sprintf("%s-vehicle-table", stack_name)),
+		TableName: jsii.String(fmt.Sprintf("%s-Vehicle-Table", stack_name)),
 	})
 
-	//^ User-TABLE
-	user_table := dynamodb.NewTable(stack, jsii.String("rto-office-table"), &dynamodb.TableProps{
+	//^ RTO-Office-TABLE
+	rto_office_table := dynamodb.NewTable(stack, jsii.String(fmt.Sprintf("%s-rto-office-table", stack_name)), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{
-			Name: jsii.String("rto_reg_no"),
+			Name: jsii.String("office-name"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String(fmt.Sprintf("%s-rto-office-table", stack_name)),
+		TableName: jsii.String(fmt.Sprintf("%s-RTO-Office-Table", stack_name)),
 	})
 
 	//^ Log group of vrc handler
@@ -148,9 +148,9 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"PASSWORD":       jsii.String(os.Getenv("PASSWORD")),
 			"RELEASE_MODE":   jsii.String(os.Getenv("RELEASE_MODE")),
 			"ADMIN":          jsii.String(os.Getenv("ADMIN")),
-			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
+			"USER_TABLE_ARN": jsii.String(*rto_office_table.TableArn()),
 		},
-		Role:         roles.CreateDbRole(stack, user_table),
+		Role:         roles.CreateDbRole(stack, rto_office_table),
 		FunctionName: jsii.String(fmt.Sprintf("%s-Auth-Lambda", stack_name)),
 	})
 
@@ -168,7 +168,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
+			"USER_TABLE_ARN": jsii.String(*rto_office_table.TableArn()),
 		},
 		FunctionName: jsii.String(fmt.Sprintf("%s-Connect-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Connect"),
@@ -182,7 +182,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
+			"USER_TABLE_ARN": jsii.String(*rto_office_table.TableArn()),
 		},
 		FunctionName: jsii.String(fmt.Sprintf("%s-Disconnect-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Disconnect"),
@@ -196,7 +196,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
 			"REGION":         jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
-			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
+			"USER_TABLE_ARN": jsii.String(*rto_office_table.TableArn()),
 		},
 		FunctionName: jsii.String(fmt.Sprintf("%s-Report-Authority-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Report-Authority"),
