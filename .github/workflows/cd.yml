@@ -121,4 +121,4 @@ jobs:
 
       - name: CDK Deploy
         working-directory: deploy-scripts
-        run: cdk deploy
+        run: cdk deploy --require-approval never
