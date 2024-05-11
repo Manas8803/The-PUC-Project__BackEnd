@@ -45,6 +45,7 @@ exports.handler = async function (event, context) {
   const data = event.body.Data;
   console.log(event.body);
 
+  //! CHECK FOR ERROR LATER
   try {
     if (connection.connectionId !== event.requestContext.connectionId) {
       await callbackAPI
@@ -55,6 +56,7 @@ exports.handler = async function (event, context) {
     console.log(e);
     return { statusCode: 500 };
   }
+  //!
 
   return { statusCode: 200 };
 };
