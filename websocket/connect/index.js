@@ -6,6 +6,12 @@ exports.handler = async function (event, context) {
 		? event.queryStringParameters.office_name
 		: null;
 	console.log(rtoOfficeName);
+	if (!rtoOfficeName) {
+		return {
+			statusCode: 200,
+			body: JSON.stringify({ message: "Connected successfully" }),
+		};
+	}
 
 	try {
 		console.log("In Connect: " + rtoOfficeName);

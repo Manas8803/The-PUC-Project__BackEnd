@@ -3,8 +3,8 @@ const ddb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async function (event, context) {
   let connection;
-  const rtoOfficeName = event.queryStringParameters ? event.queryStringParameters.office_name : null;
-  console.log(rtoOfficeName);
+  const body = JSON.parse(event.body);
+  const rtoOfficeName = body.data.office_name;
 
   if (!rtoOfficeName) {
     return {
@@ -42,21 +42,18 @@ exports.handler = async function (event, context) {
     endpoint: event.requestContext.domainName + "/" + event.requestContext.stage,
   });
 
-  const data = event.body.Data;
-  console.log(event.body);
+  console.log("ConnectionId : ",connection.connectionId);
 
-  //! CHECK FOR ERROR LATER
   try {
     if (connection.connectionId !== event.requestContext.connectionId) {
       await callbackAPI
-        .postToConnection({ ConnectionId: connection.connectionId, Data: JSON.stringify(data) })
+        .postToConnection({ ConnectionId: connection.connectionId, Data: JSON.stringify(body.data) })
         .promise();
     }
   } catch (e) {
     console.log(e);
     return { statusCode: 500 };
   }
-  //!
 
   return { statusCode: 200 };
 };

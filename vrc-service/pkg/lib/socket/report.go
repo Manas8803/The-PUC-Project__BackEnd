@@ -16,7 +16,7 @@ type Payload struct {
 }
 
 func ReportAuthority(vehicle *service.Vehicle) error {
-	url := os.Getenv("REPORT_WEBSOCKET_URL") + "?office_name=" + vehicle.OfficeName
+	url := os.Getenv("REPORT_WEBSOCKET_URL") + "?office_name=none"
 	conn, _, err := websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
 		log.Fatal("Failed to connect to WebSocket:", err)
