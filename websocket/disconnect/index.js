@@ -1,35 +1,32 @@
-    const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
+const ddb = new AWS.DynamoDB.DocumentClient();
 
-      exports.handler = async function (event, context) {
-        let connectionInfo;
-        let connectionId = event.requestContext.connectionId;
-      
-        const callbackAPI = new AWS.ApiGatewayManagementApi({
-          apiVersion: '2018-11-29',
-          endpoint:
-            event.requestContext.domainName + '/' + event.requestContext.stage,
-        });
-      
-        try {
-          connectionInfo = await callbackAPI
-            .getConnection({ ConnectionId: event.requestContext.connectionId })
-            .promise();
-        } catch (e) {
-          console.log(e);
-        }
-      
-        connectionInfo.connectionID = connectionId;
-      
-        await callbackAPI
-          .postToConnection({
-            ConnectionId: event.requestContext.connectionId,
-            Data:
-              'Use the sendmessage route to send a message. Your info:' +
-              JSON.stringify(connectionInfo),
-          })
-          .promise();
-      
-        return {
-          statusCode: 200,
-        };
-      };
+exports.handler = async function (event, context) {
+
+	const rtoOfficeName = event["queryStringParameters"]
+		? event["queryStringParameters"].office_name
+		: null;
+
+	try {
+		console.log("In Disconnect: " + rtoOfficeName);
+		await ddb
+			.delete({
+				TableName: process.env.USER_TABLE_ARN,
+				Key: {
+					office_name: rtoOfficeName,
+				},
+			})
+			.promise();
+
+		return {
+			statusCode: 200,
+			body: JSON.stringify({ message: "Disconnected successfully" }),
+		};
+	} catch (err) {
+		console.error("Error disconnecting:", err);
+		return {
+			statusCode: 500,
+			body: JSON.stringify({ error: "Error disconnecting" }),
+		};
+	}
+};

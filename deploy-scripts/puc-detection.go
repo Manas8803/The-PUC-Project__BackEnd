@@ -31,7 +31,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	//^ Vehicle-TABLE
 	vehicle_table := dynamodb.NewTable(stack, jsii.String("vehicle-table"), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{
-			Name: jsii.String("reg_no"),
+			Name: jsii.String("office_name"),
 			Type: dynamodb.AttributeType_STRING,
 		},
 		TableName: jsii.String(fmt.Sprintf("%s-vehicle-table", stack_name)),
@@ -40,7 +40,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	//^ User-TABLE
 	user_table := dynamodb.NewTable(stack, jsii.String("user-table"), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{
-			Name: jsii.String("email"),
+			Name: jsii.String("rto_reg_no"),
 			Type: dynamodb.AttributeType_STRING,
 		},
 		TableName: jsii.String(fmt.Sprintf("%s-user-table", stack_name)),
