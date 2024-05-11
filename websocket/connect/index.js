@@ -11,7 +11,7 @@ exports.handler = async function (event, context) {
 		console.log("In Connect: " + rtoOfficeName);
 		await ddb
 			.put({
-				TableName: process.env.USER_TABLE_ARN,
+				TableName: process.env.RTO_OFFICE_TABLE_ARN,
 				Item: {
 					office_name: rtoOfficeName,
 					connectionId: event.requestContext.connectionId,

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	event "github.com/Manas8803/puc-detection/deploy-scripts/events"
@@ -13,6 +14,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
+	"github.com/joho/godotenv"
 )
 
 var stack_name = "PUC-Detection"
@@ -34,7 +36,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			Name: jsii.String("reg_no"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String(fmt.Sprintf("%s-Vehicle-Table", stack_name)),
+		TableName: jsii.String(fmt.Sprintf("%s-Vehicle_Table", stack_name)),
 	})
 
 	//^ RTO-Office-TABLE
@@ -43,7 +45,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			Name: jsii.String("office_name"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String(fmt.Sprintf("%s-RTO-Office-Table", stack_name)),
+		TableName: jsii.String(fmt.Sprintf("%s-RTO-Office_Table", stack_name)),
 	})
 
 	//^ Log group of vrc handler
@@ -222,10 +224,10 @@ func main() {
 
 func env() *awscdk.Environment {
 
-	// err := godotenv.Load("../.env")
-	// if err != nil {
-	// 	log.Fatalln("Error loading .env file : ", err)
-	// }
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Fatalln("Error loading .env file : ", err)
+	}
 
 	return &awscdk.Environment{
 		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),

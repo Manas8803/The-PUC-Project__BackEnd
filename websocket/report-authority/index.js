@@ -4,7 +4,9 @@ const AWS = require('aws-sdk');
       exports.handler = async function (event, context) {
         let connections;
         try {
-          connections = await ddb.scan({ TableName: process.env.USER_TABLE_ARN }).promise();
+          connections = await ddb
+						.scan({ TableName: process.env.RTO_OFFICE_TABLE_ARN })
+						.promise();
         } catch (err) {
           return {
             statusCode: 500,
