@@ -38,12 +38,12 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	})
 
 	//^ User-TABLE
-	user_table := dynamodb.NewTable(stack, jsii.String("user-table"), &dynamodb.TableProps{
+	user_table := dynamodb.NewTable(stack, jsii.String("rto-office-table"), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{
 			Name: jsii.String("rto_reg_no"),
 			Type: dynamodb.AttributeType_STRING,
 		},
-		TableName: jsii.String(fmt.Sprintf("%s-user-table", stack_name)),
+		TableName: jsii.String(fmt.Sprintf("%s-rto-office-table", stack_name)),
 	})
 
 	//^ Log group of vrc handler

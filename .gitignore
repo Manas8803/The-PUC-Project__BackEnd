@@ -38,4 +38,4 @@ ocr-service/bootstrap
 vrc-service/bootstrap
 reg_renewal_reminder-service/bootstrap
 
-.DS_Store
+*.DS_Store
