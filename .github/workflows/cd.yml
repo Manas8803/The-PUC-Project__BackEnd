@@ -53,24 +53,6 @@ jobs:
           name: vrc-service
           path: ./vrc-service/bootstrap
 
-      - name: Upload Websocket-Connect Build
-        uses: actions/upload-artifact@v3
-        with:
-          name: websocket-connect
-          path: ./deploy-scripts/zip/connect.zip
-
-      - name: Upload Websocket-Connect Build
-        uses: actions/upload-artifact@v3
-        with:
-          name: websocket-disconnect
-          path: ./deploy-scripts/zip/disconnect.zip
-
-      - name: Upload Websocket-Report-Authority Build
-        uses: actions/upload-artifact@v3
-        with:
-          name: websocket-report-authority
-          path: ./deploy-scripts/zip/report-authority.zip
-
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -136,24 +118,6 @@ jobs:
         with:
           name: vrc-service
           path: ./vrc-service
-
-      - name: Download Websocket-Connect Service Build
-        uses: actions/download-artifact@v3
-        with:
-          name: websocket-connect
-          path: ./deploy-scripts/zip/connect.zip
-
-      - name: Download Websocket-Disconnect Service Build
-        uses: actions/download-artifact@v3
-        with:
-          name: websocket-disconnect
-          path: ./deploy-scripts/zip/disconnect.zip
-
-      - name: Download Websocket-Report-Authority Service Build
-        uses: actions/download-artifact@v3
-        with:
-          name: websocket-report-authority
-          path: ./deploy-scripts/zip/report-authority.zip
 
       - name: CDK Deploy
         working-directory: deploy-scripts
