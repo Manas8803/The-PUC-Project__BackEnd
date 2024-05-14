@@ -37,6 +37,15 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		TableName: jsii.String(fmt.Sprintf("%s-Vehicle_Table", stack_name)),
 	})
 
+	//^ User-TABLE
+	user_table := dynamodb.NewTable(stack, jsii.String(fmt.Sprintf("%s-User-Table", stack_name)), &dynamodb.TableProps{
+		PartitionKey: &dynamodb.Attribute{
+			Name: jsii.String("email"),
+			Type: dynamodb.AttributeType_STRING,
+		},
+		TableName: jsii.String(fmt.Sprintf("%s-User_Table", stack_name)),
+	})
+
 	//^ RTO-Office-TABLE
 	rto_office_table := dynamodb.NewTable(stack, jsii.String(fmt.Sprintf("%s-Rto-Office-Table", stack_name)), &dynamodb.TableProps{
 		PartitionKey: &dynamodb.Attribute{
@@ -149,9 +158,9 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"PASSWORD":             jsii.String(os.Getenv("PASSWORD")),
 			"RELEASE_MODE":         jsii.String(os.Getenv("RELEASE_MODE")),
 			"ADMIN":                jsii.String(os.Getenv("ADMIN")),
-			"RTO_OFFICE_TABLE_ARN": jsii.String(*rto_office_table.TableArn()),
+			"RTO_OFFICE_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
-		Role:         roles.CreateDbRole(stack, rto_office_table),
+		Role:         roles.CreateDbRole(stack, user_table),
 		FunctionName: jsii.String(fmt.Sprintf("%s-Auth-Lambda", stack_name)),
 	})
 
