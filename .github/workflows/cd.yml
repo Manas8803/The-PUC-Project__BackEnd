@@ -60,6 +60,7 @@ jobs:
       CDK_DEFAULT_REGION: ${{ secrets.CDK_DEFAULT_REGION }}
       CDK_DEFAULT_ACCOUNT: ${{ secrets.CDK_DEFAULT_ACCOUNT }}
       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      USER_TABLE_ARN: ${{ secrets.USER_TABLE_ARN }}
       JWT_LIFETIME: ${{ secrets.JWT_LIFETIME }}
       EMAIL: ${{ secrets.EMAIL }}
       PASSWORD: ${{ secrets.PASSWORD }}

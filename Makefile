@@ -1,6 +1,7 @@
 .PHONY: build deploy clean all all-swap
 
 build:
+	GOOS=linux GOARCH=amd64 go build -o ./auth-service/bootstrap ./auth-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./ocr-service/bootstrap ./ocr-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./vrc-service/bootstrap ./vrc-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./reg_renewal_reminder-service/bootstrap ./reg_renewal_reminder-service/cmd/main.go  
