@@ -14,6 +14,33 @@ exports.handler = async function (event, context) {
 	}
 
 	try {
+		const params = {
+			TableName: process.env.USER_TABLE_ARN,
+			FilterExpression: "office_name = :officeName",
+			ExpressionAttributeValues: {
+				":officeName": rtoOfficeName,
+			},
+		};
+
+		const data = await ddb.scan(params).promise();
+
+		if (data.Items.length === 0) {
+			return {
+				statusCode: 404,
+				body: JSON.stringify({
+					message: `Office name '${rtoOfficeName}' is not registered`,
+				}),
+			};
+		}
+	} catch (err) {
+		console.error("Error checking office name:", err);
+		return {
+			statusCode: 500,
+			body: JSON.stringify({ error: "Error checking office name" }),
+		};
+	}
+
+	try {
 		console.log("In Connect: " + rtoOfficeName);
 		await ddb
 			.put({
