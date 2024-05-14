@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"os"
 
 	"github.com/Manas8803/The-Puc-Detection/auth-service/main-app/routes"
@@ -10,6 +11,7 @@ import (
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 //	@title			Auth API
@@ -21,10 +23,11 @@ var ginLambda *ginadapter.GinLambda
 
 func init() {
 
-	prod := os.Getenv("RELEASE_MODE")
-	if prod == "true" {
-		gin.SetMode(gin.ReleaseMode)
+	mode := os.Getenv("RELEASE_MODE")
+	if mode != "prod" {
+		return
 	}
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(cors.Default())
 
@@ -40,17 +43,24 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 }
 
 func main() {
-	lambda.Start(Handler)
-	// err := godotenv.Load("../.env")
-	// if err != nil {
-	// 	log.Println(err)
-	// 	return
-	// }
-	// router := gin.Default()
-	// router.Use(cors.Default())
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Println("NOT ABLE TO FIND .env FILE..\nContinuing...")
+	}
+	mode := os.Getenv("RELEASE_MODE")
+	if mode == "testing"{
+		TestRun()
+		return
+	}
 
-	// api := router.Group("/api/v1")
-	// //* Passing the router to all user(auth-service) routes.
-	// routes.UserRoute(api)
-	// router.Run("localhost:8080")
+	lambda.Start(Handler)
+}
+
+func TestRun() {
+	router := gin.Default()
+
+	api := router.Group("/api/v1")
+	router.Use(cors.Default())
+	routes.UserRoute(api)
+	router.Run("localhost:8000")
 }
