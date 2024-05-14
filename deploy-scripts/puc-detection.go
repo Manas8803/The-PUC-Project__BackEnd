@@ -158,7 +158,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 			"PASSWORD":             jsii.String(os.Getenv("PASSWORD")),
 			"RELEASE_MODE":         jsii.String(os.Getenv("RELEASE_MODE")),
 			"ADMIN":                jsii.String(os.Getenv("ADMIN")),
-			"RTO_OFFICE_TABLE_ARN": jsii.String(*user_table.TableArn()),
+			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
 		Role:         roles.CreateDbRole(stack, user_table),
 		FunctionName: jsii.String(fmt.Sprintf("%s-Auth-Lambda", stack_name)),
