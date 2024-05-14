@@ -36,6 +36,10 @@ func Login(r *gin.Context) {
 	user, userErr := db.GetUserByEmail(req.Email)
 	if userErr != nil {
 		log.Println(userErr)
+		if strings.Contains(userErr.Error(), "no authorities registered with the given email address") {
+			network.RespondWithError(r, http.StatusNotFound, "Email is not registered with any authorities.")
+			return
+		}
 		network.RespondWithError(r, http.StatusInternalServerError, "Internal server error : "+userErr.Error())
 		return
 	}

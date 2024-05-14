@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -90,7 +91,7 @@ func GetUserByEmail(Email string) (*User, error) {
 	//* Check if there are no offices registered with the given email address
 	if len(users) == 0 {
 		log.Println("NO Authorities")
-		return &User{}, nil
+		return &User{}, fmt.Errorf("no authorities registered with the given email address")
 	}
 
 	return users[0], nil
