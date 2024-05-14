@@ -2,15 +2,14 @@ package main
 
 import (
 	"context"
-	"log"
 	"os"
 
 	"github.com/Manas8803/The-Puc-Detection/auth-service/main-app/routes"
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 )
 
 //	@title			Auth API
@@ -41,17 +40,17 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 }
 
 func main() {
-	// lambda.Start(Handler)
-	err := godotenv.Load("../.env")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	router := gin.Default()
-	router.Use(cors.Default())
+	lambda.Start(Handler)
+	// err := godotenv.Load("../.env")
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+	// router := gin.Default()
+	// router.Use(cors.Default())
 
-	api := router.Group("/api/v1")
-	//* Passing the router to all user(auth-service) routes.
-	routes.UserRoute(api)
-	router.Run("localhost:8080")
+	// api := router.Group("/api/v1")
+	// //* Passing the router to all user(auth-service) routes.
+	// routes.UserRoute(api)
+	// router.Run("localhost:8080")
 }
