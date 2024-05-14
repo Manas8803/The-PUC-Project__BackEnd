@@ -167,6 +167,11 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 	//^ API Gateway
 	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Auth"), &awsapigateway.LambdaRestApiProps{
 		Handler: auth_handler,
+		DefaultCorsPreflightOptions: &awsapigateway.CorsOptions{
+			AllowOrigins: awsapigateway.Cors_ALL_ORIGINS(),
+			AllowMethods: awsapigateway.Cors_ALL_METHODS(),
+			AllowHeaders: awsapigateway.Cors_DEFAULT_HEADERS(),
+		},
 	})
 
 	//~ WEBSOCKET API :
@@ -179,6 +184,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Environment: &map[string]*string{
 			"REGION":               jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"RTO_OFFICE_TABLE_ARN": jsii.String(*rto_office_table.TableArn()),
+			"USER_TABLE_ARN":       jsii.String(*user_table.TableArn()),
 		},
 		FunctionName: jsii.String(fmt.Sprintf("%s-Connect-Lambda", stack_name)),
 		Role:         roles.CreateWebSocketLambdaRole(stack, "Connect"),
