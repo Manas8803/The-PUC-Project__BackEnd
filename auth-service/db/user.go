@@ -13,11 +13,41 @@ import (
 )
 
 type User struct {
-	OfficeName   string `dynamodbav:"office_name"`
-	ConnectionID string `dynamodbav:"connection_id"`
-	Email        string `dynamodbav:"email"`
-	Password     string `dynamodbav:"password"`
-	ID           string `dynamodbav:"id"`
+	OfficeName string `dynamodbav:"office_name"`
+	Email      string `dynamodbav:"email"`
+	Password   string `dynamodbav:"password"`
+}
+
+func CreateUserByEmail(u *User) (*User, error) {
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		return nil, err
+	}
+	svc := dynamodb.NewFromConfig(cfg)
+	tableName := os.Getenv("USER_TABLE_ARN")
+	av, err := attributevalue.MarshalMap(u)
+	if err != nil {
+		log.Println("Error marshaling user struct to AttributeValue map")
+		return nil, err
+	}
+	condition := expression.AttributeNotExists(expression.Name("email"))
+	expr, err := expression.NewBuilder().WithCondition(condition).Build()
+	if err != nil {
+		log.Println("Error building expression")
+		return nil, err
+	}
+	input := &dynamodb.PutItemInput{
+		Item:                      av,
+		TableName:                 aws.String(tableName),
+		ConditionExpression:       expr.Condition(),
+		ExpressionAttributeNames:  expr.Names(),
+		ExpressionAttributeValues: expr.Values(),
+	}
+	_, err = svc.PutItem(context.TODO(), input)
+	if err != nil {
+		return nil, err
+	}
+	return u, nil
 }
 
 func GetUserByEmail(Email string) (*User, error) {
@@ -30,7 +60,6 @@ func GetUserByEmail(Email string) (*User, error) {
 	svc := dynamodb.NewFromConfig(cfg)
 	tableName := os.Getenv("USER_TABLE_ARN")
 
-	// Define the key condition expression
 	keyCond := expression.Key("email").Equal(expression.Value(Email))
 	expr, err := expression.NewBuilder().WithKeyCondition(keyCond).Build()
 	if err != nil {
@@ -49,7 +78,7 @@ func GetUserByEmail(Email string) (*User, error) {
 
 	output, err := svc.Query(context.TODO(), input)
 	if err != nil {
-		log.Println("error querying items")
+		log.Println("error querying items : ", err)
 		return nil, err
 	}
 	err = attributevalue.UnmarshalListOfMaps(output.Items, &users)
@@ -58,7 +87,7 @@ func GetUserByEmail(Email string) (*User, error) {
 		return nil, err
 	}
 
-	//* Check if there are no vehicles
+	//* Check if there are no offices registered with the given email address
 	if len(users) == 0 {
 		log.Println("NO Authorities")
 		return &User{}, nil
