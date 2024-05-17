@@ -1,4 +1,4 @@
-module github.com/Manas8803/Puc-Detection/ocr-service
+module github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service
 
 go 1.21.3
 

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Manas8803/Puc-Detection/reg_expiration_job-service/pkg/models/service"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_expiration_job-service/pkg/models/service"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/lambda"

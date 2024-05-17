@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	lmd "github.com/Manas8803/Puc-Detection/reg_renewal_reminder-service/pkg/lib/lambda"
-	"github.com/Manas8803/Puc-Detection/reg_renewal_reminder-service/pkg/lib/util"
+	lmd "github.com/Manas8803/The-PUC-Project__BackEnd/reg_renewal_reminder-service/pkg/lib/lambda"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_renewal_reminder-service/pkg/lib/util"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )

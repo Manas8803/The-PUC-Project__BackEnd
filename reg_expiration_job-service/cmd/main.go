@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	lmd "github.com/Manas8803/Puc-Detection/reg_expiration_job-service/pkg/lib/lambda"
-	"github.com/Manas8803/Puc-Detection/reg_expiration_job-service/pkg/lib/util"
-	"github.com/Manas8803/Puc-Detection/reg_expiration_job-service/pkg/models/service"
+	lmd "github.com/Manas8803/The-PUC-Project__BackEnd/reg_expiration_job-service/pkg/lib/lambda"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_expiration_job-service/pkg/lib/util"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_expiration_job-service/pkg/models/service"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )

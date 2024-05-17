@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/models/service"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/vrc-service/pkg/models/service"
 )
 
 func IsPucExpired(v *service.Vehicle) (bool, error) {

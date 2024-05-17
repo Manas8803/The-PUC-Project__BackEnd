@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Manas8803/Puc-Detection/ocr-service/pkg/lib/aws"
-	"github.com/Manas8803/Puc-Detection/ocr-service/pkg/lib/image"
-	"github.com/Manas8803/Puc-Detection/ocr-service/pkg/lib/lambda"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service/pkg/lib/aws"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service/pkg/lib/image"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service/pkg/lib/lambda"
 
 	"github.com/aws/aws-lambda-go/events"
 	lmd "github.com/aws/aws-lambda-go/lambda"

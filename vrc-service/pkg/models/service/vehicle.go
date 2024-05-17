@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/models/db"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/vrc-service/pkg/models/db"
 )
 
 type Date struct {

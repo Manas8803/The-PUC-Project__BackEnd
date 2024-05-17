@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/Manas8803/Puc-Detection/reg_renewal_reminder-service/pkg/models/service"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_renewal_reminder-service/pkg/models/service"
 )
 
 func CheckRegNoIfExists(reg_no string) (bool, *service.Vehicle, error) {

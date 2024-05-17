@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Manas8803/Puc-Detection/ocr-service/pkg/lib/image"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service/pkg/lib/image"
 )
 
 func TestDetectText(t *testing.T) {

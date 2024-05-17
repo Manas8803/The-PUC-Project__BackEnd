@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/Manas8803/The-Puc-Detection/auth-service/main-app/routes"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/auth-service/main-app/routes"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"

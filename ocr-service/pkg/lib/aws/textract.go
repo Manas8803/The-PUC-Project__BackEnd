@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Manas8803/Puc-Detection/ocr-service/pkg/lib/aws/set"
-	ig "github.com/Manas8803/Puc-Detection/ocr-service/pkg/lib/image"
+	ig "github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service/pkg/lib/image"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/ocr-service/pkg/lib/aws/set"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/textract"

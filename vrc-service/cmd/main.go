@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/lib/api"
-	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/lib/socket"
-	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/lib/util"
-	"github.com/Manas8803/Puc-Detection/vrc-service/pkg/models/service"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/vrc-service/pkg/lib/api"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/vrc-service/pkg/lib/socket"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/vrc-service/pkg/lib/util"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/vrc-service/pkg/models/service"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )

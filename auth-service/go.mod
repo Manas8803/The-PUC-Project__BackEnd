@@ -1,4 +1,4 @@
-module github.com/Manas8803/The-Puc-Detection/auth-service
+module github.com/Manas8803/The-PUC-Project__BackEnd/auth-service
 
 go 1.21.3
 

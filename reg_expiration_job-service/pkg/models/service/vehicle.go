@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Manas8803/Puc-Detection/reg_expiration_job-service/pkg/models/db"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_expiration_job-service/pkg/models/db"
 )
 
 type Date struct {

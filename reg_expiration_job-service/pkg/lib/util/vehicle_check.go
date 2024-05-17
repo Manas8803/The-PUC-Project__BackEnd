@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Manas8803/Puc-Detection/reg_expiration_job-service/pkg/models/service"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/reg_expiration_job-service/pkg/models/service"
 )
 
 func IsPucExpired(v *service.Vehicle) (bool, error) {

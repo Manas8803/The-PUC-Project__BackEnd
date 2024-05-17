@@ -4,7 +4,7 @@ import (
 	"errors"
 	"regexp"
 
-	"github.com/Manas8803/The-Puc-Detection/auth-service/db"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/auth-service/db"
 )
 
 func UserValidator(user *db.User) error {

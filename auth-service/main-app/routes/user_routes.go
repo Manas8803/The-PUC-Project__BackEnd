@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/Manas8803/The-Puc-Detection/auth-service/main-app/controllers"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/auth-service/main-app/controllers"
 	"github.com/gin-gonic/gin"
 )
 
