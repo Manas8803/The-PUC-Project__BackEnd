@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const ddb = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async function (event, context) {
-  let connection;
+  let connections;
   const body = JSON.parse(event.body);
   const rtoOfficeName = body.data.office_name;
 
@@ -22,7 +22,7 @@ exports.handler = async function (event, context) {
     };
 
     const getResult = await ddb.get(getParams).promise();
-    connection = getResult.Item;
+    connections = getResult.Item ? getResult.Item.connection_id : null;
   } catch (err) {
     return {
       statusCode: 500,
@@ -30,10 +30,10 @@ exports.handler = async function (event, context) {
     };
   }
 
-  if (!connection) {
+  if (!connections || connections.length === 0) {
     return {
       statusCode: 404,
-      message: `No connection found for office_name: ${rtoOfficeName}`,
+      message: `No connections found for office_name: ${rtoOfficeName}`,
     };
   }
 
@@ -42,17 +42,27 @@ exports.handler = async function (event, context) {
     endpoint: event.requestContext.domainName + "/" + event.requestContext.stage,
   });
 
-  console.log("ConnectionId : ",connection.connectionId);
-
-  try {
-    if (connection.connectionId !== event.requestContext.connectionId) {
-      await callbackAPI
-        .postToConnection({ ConnectionId: connection.connectionId, Data: JSON.stringify(body.data) })
-        .promise();
+  let errors = [];
+  
+  for (let conn of connections) {
+    const connectionId = conn;
+    if (connectionId !== event.requestContext.connectionId) {
+      try {
+        await callbackAPI
+          .postToConnection({ ConnectionId: connectionId, Data: JSON.stringify(body.data) })
+          .promise();
+      } catch (e) {
+        console.log(`Error posting to connection ${connectionId}:`, e);
+        errors.push(connectionId);
+      }
     }
-  } catch (e) {
-    console.log(e);
-    return { statusCode: 500 };
+  }
+
+  if (errors.length > 0) {
+    return {
+      statusCode: 500,
+      message: `Failed to post to some connections: ${errors.join(", ")}`,
+    };
   }
 
   return { statusCode: 200 };

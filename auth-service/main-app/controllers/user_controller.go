@@ -58,7 +58,7 @@ func Login(r *gin.Context) {
 		return
 	}
 
-	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token, "office_name" : user.OfficeName}})
+	r.JSON(http.StatusOK, responses.UserResponse{Message: "success", Data: map[string]interface{}{"token": "Bearer " + token, "office_name": user.OfficeName}})
 }
 
 func Register(r *gin.Context) {
