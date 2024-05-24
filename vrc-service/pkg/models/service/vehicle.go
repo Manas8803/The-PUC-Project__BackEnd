@@ -55,6 +55,7 @@ type Vehicle struct {
 	VehicleType      string `json:"vehicle_type"`
 	Mobile           int64  `json:"mobile"`
 	PucUpto          *Date  `json:"puc_upto"`
+	PucStatus        bool   `json:"puc_status"`
 	LastCheckDate    *Date  `json:"last_check_date"`
 }
 

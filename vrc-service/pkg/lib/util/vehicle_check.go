@@ -18,6 +18,7 @@ func IsPucExpired(v *service.Vehicle) (bool, error) {
 
 	today := time.Now().UTC()
 	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, time.UTC)
+	v.PucStatus = pucUptoTime.Before(today)
 
 	return pucUptoTime.Before(today), nil
 }
