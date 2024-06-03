@@ -51,7 +51,11 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, err
 	}
 
-	return events.APIGatewayProxyResponse{Body: string(respBytes), StatusCode: http.StatusOK}, nil
+	return events.APIGatewayProxyResponse{Body: string(respBytes), StatusCode: http.StatusOK, Headers: map[string]string{
+		"Access-Control-Allow-Origin":  "*",
+		"Access-Control-Allow-Methods": "GET, OPTIONS",
+		"Access-Control-Allow-Headers": "Content-Type",
+	}}, nil
 }
 func main() {
 	lambda.Start(Handler)
