@@ -5,6 +5,7 @@ build:
 	GOOS=linux GOARCH=amd64 go build -o ./ocr-service/bootstrap ./ocr-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./vrc-service/bootstrap ./vrc-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./reg_renewal_reminder-service/bootstrap ./reg_renewal_reminder-service/cmd/main.go  
+	GOOS=linux GOARCH=amd64 go build -o ./fetch-vehicle-service/bootstrap ./fetch-vehicle-service/cmd/main.go  
 	GOOS=linux GOARCH=amd64 go build -o ./reg_expiration_job-service/bootstrap ./reg_expiration_job-service/cmd/main.go
 
 deploy:
@@ -18,6 +19,7 @@ clean:
 	rm -rf ./reg_renewal_reminder-service/bootstrap
 	rm -rf ./vrc-service/bootstrap
 	rm -rf ./reg_expiration_job-service/bootstrap
+	rm -rf ./fetch-vehicle-service/bootstrap
 	
 all:
 	make clean
