@@ -86,7 +86,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 
 	//^ Fetch-Vehicle handler
 	fetch_vehicle_handler := awslambda.NewFunction(stack, jsii.String("Fetch-Vehicle-Lambda"), &awslambda.FunctionProps{
-		Code:    awslambda.Code_FromAsset(jsii.String("../vrc-service"), nil),
+		Code:    awslambda.Code_FromAsset(jsii.String("../fetch_vehicle-service"), nil),
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),

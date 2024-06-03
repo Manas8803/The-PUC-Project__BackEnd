@@ -2,6 +2,7 @@ package db
 
 import (
 	"os"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -30,8 +31,8 @@ func FetchVehicles(officeName string) ([]*Vehicle, error) {
 
 	svc := dynamodb.New(sess)
 
-	// Build the expression to filter on office_name
-	filt := expression.Name("office_name").Equal(expression.Value(officeName))
+	// Build the expression to filter on office_name (case-insensitive)
+	filt := expression.Name("office_name").Equal(expression.Value(strings.ToLower(officeName)))
 	expr, err := expression.NewBuilder().WithFilter(filt).Build()
 	if err != nil {
 		return nil, err

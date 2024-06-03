@@ -14,17 +14,15 @@ import (
 type Payload struct {
 	Officename string `json:"office_name"`
 }
-
 type Response struct {
-	Message string `json:"message"`
-	Data    []byte `json:"data"`
+	Message  string            `json:"message"`
+	Vehicles []service.Vehicle `json:"vehicles"`
 }
 
 func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var data Payload
 	err := json.Unmarshal([]byte(req.Body), &data)
 	if err != nil {
-		log.Println("Response")
 		log.Println("Error in unmarshalling data : ", err)
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, nil
 	}
@@ -35,16 +33,12 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, err
 	}
 
-	payload, err := json.Marshal(vehicles)
-	if err != nil {
-		log.Println("Error in marshalling vehicles : ", err)
-		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, err
+	resp := Response{
+		Message:  "Successfully fetched vehicles from DB",
+		Vehicles: vehicles,
 	}
 
-	resp := Response{
-		Message: "Successfully fetched vehicles from DB",
-		Data:    payload,
-	}
+	log.Println(resp)
 
 	respBytes, err := json.Marshal(resp)
 	if err != nil {
