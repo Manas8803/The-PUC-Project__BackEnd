@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Manas8803/The-PUC-Project__BackEnd/fetch-vehicle-service/pkg/models/db"
+	"github.com/Manas8803/The-PUC-Project__BackEnd/fetch_vehicle-service/pkg/models/db"
 )
 
 type Vehicle struct {
