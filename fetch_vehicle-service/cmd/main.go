@@ -12,12 +12,12 @@ import (
 )
 
 type Payload struct {
-	officename string `json:"office_name"`
+	Officename string `json:"office_name"`
 }
 
 type Response struct {
-	message string `json:"message"`
-	data    []byte `json:"data"`
+	Message string `json:"message"`
+	Data    []byte `json:"data"`
 }
 
 func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -28,7 +28,7 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, nil
 	}
 
-	vehicles, err := service.FetchVehicles(data.officename)
+	vehicles, err := service.FetchVehicles(data.Officename)
 	if err != nil {
 		log.Println("Error in fetching vehicles : ", err)
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, err
@@ -41,8 +41,8 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 	}
 
 	resp := Response{
-		message: "Successfully fetched vehicles from DB",
-		data:    payload,
+		Message: "Successfully fetched vehicles from DB",
+		Data:    payload,
 	}
 
 	respBytes, err := json.Marshal(resp)
