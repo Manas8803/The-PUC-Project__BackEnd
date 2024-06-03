@@ -99,7 +99,8 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		LogGroup:     logGroup_fetch_vehicle,
 	})
 
-	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Auth"), &awsapigateway.LambdaRestApiProps{
+	//^ Fetch API Gateway
+	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Fetch_Vehicle"), &awsapigateway.LambdaRestApiProps{
 		Handler: fetch_vehicle_handler,
 		DefaultCorsPreflightOptions: &awsapigateway.CorsOptions{
 			AllowOrigins: awsapigateway.Cors_ALL_ORIGINS(),
@@ -194,7 +195,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		FunctionName: jsii.String(fmt.Sprintf("%s-Auth-Lambda", stack_name)),
 	})
 
-	//^ API Gateway
+	//^ Auth API Gateway
 	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Auth"), &awsapigateway.LambdaRestApiProps{
 		Handler: auth_handler,
 		DefaultCorsPreflightOptions: &awsapigateway.CorsOptions{
