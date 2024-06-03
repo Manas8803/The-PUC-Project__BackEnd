@@ -78,6 +78,36 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		LogGroup:     logGroup_vrc,
 	})
 
+	//^ Log group of fetch-vehicle handler
+	logGroup_fetch_vehicle := awslogs.NewLogGroup(stack, jsii.String("Fetch-Vehicle-LogGroup"), &awslogs.LogGroupProps{
+		LogGroupName:  jsii.String(fmt.Sprintf("/aws/lambda/%s-Fetch-Vehicle", stack_name)),
+		RemovalPolicy: awscdk.RemovalPolicy_DESTROY,
+	})
+
+	//^ Fetch-Vehicle handler
+	fetch_vehicle_handler := awslambda.NewFunction(stack, jsii.String("Fetch-Vehicle-Lambda"), &awslambda.FunctionProps{
+		Code:    awslambda.Code_FromAsset(jsii.String("../vrc-service"), nil),
+		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
+		Handler: jsii.String("main"),
+		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
+		Role:    roles.CreateVRCHandlerRole(stack, vehicle_table),
+		Environment: &map[string]*string{
+			"REGION":            jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),
+		},
+		FunctionName: jsii.String(fmt.Sprintf("%s-Fetch-Vehicle-Lambda", stack_name)),
+		LogGroup:     logGroup_fetch_vehicle,
+	})
+
+	awsapigateway.NewLambdaRestApi(stack, jsii.String("Puc_Detection_Auth"), &awsapigateway.LambdaRestApiProps{
+		Handler: fetch_vehicle_handler,
+		DefaultCorsPreflightOptions: &awsapigateway.CorsOptions{
+			AllowOrigins: awsapigateway.Cors_ALL_ORIGINS(),
+			AllowMethods: awsapigateway.Cors_ALL_METHODS(),
+			AllowHeaders: awsapigateway.Cors_DEFAULT_HEADERS(),
+		},
+	})
+
 	//^ Log group of reg_ex_cron_job handler
 	logGroup_reg_ex := awslogs.NewLogGroup(stack, jsii.String("RegExpCronJob-LogGroup"), &awslogs.LogGroupProps{
 		LogGroupName:  jsii.String(fmt.Sprintf("/aws/lambda/%s-RegExpCronJob", stack_name)),
@@ -152,12 +182,12 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
 		Environment: &map[string]*string{
-			"JWT_SECRET_KEY":       jsii.String(os.Getenv("JWT_SECRET_KEY")),
-			"JWT_LIFETIME":         jsii.String(os.Getenv("JWT_LIFETIME")),
-			"EMAIL":                jsii.String(os.Getenv("EMAIL")),
-			"PASSWORD":             jsii.String(os.Getenv("PASSWORD")),
-			"RELEASE_MODE":         jsii.String(os.Getenv("RELEASE_MODE")),
-			"ADMIN":                jsii.String(os.Getenv("ADMIN")),
+			"JWT_SECRET_KEY": jsii.String(os.Getenv("JWT_SECRET_KEY")),
+			"JWT_LIFETIME":   jsii.String(os.Getenv("JWT_LIFETIME")),
+			"EMAIL":          jsii.String(os.Getenv("EMAIL")),
+			"PASSWORD":       jsii.String(os.Getenv("PASSWORD")),
+			"RELEASE_MODE":   jsii.String(os.Getenv("RELEASE_MODE")),
+			"ADMIN":          jsii.String(os.Getenv("ADMIN")),
 			"USER_TABLE_ARN": jsii.String(*user_table.TableArn()),
 		},
 		Role:         roles.CreateDbRole(stack, user_table),

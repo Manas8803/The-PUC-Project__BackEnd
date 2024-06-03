@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -24,16 +25,16 @@ type Vehicle struct {
 }
 
 func SaveOrUpdateVehicle(vehicle Vehicle) error {
-	// Create a new AWS session
+
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String("ap-south-1"),
+		Region: aws.String(os.Getenv("CDK_DEFAULT_REGION")),
 	})
 	if err != nil {
 		return err
 	}
 
 	svc := dynamodb.New(sess)
-	table_name := "arn:aws:dynamodb:ap-south-1:637423233104:table/PUC-Detection-vehicle-table"
+	table_name := os.Getenv("VEHICLE_TABLE_ARN")
 	// Create the input for the GetItem operation
 	getItemInput := &dynamodb.GetItemInput{
 		TableName: aws.String(table_name),

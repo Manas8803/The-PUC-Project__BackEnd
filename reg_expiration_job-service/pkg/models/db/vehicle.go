@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"log"
+	"os"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -34,7 +35,7 @@ func GetAllVehicles() (*[]Vehicle, error) {
 	client := dynamodb.NewFromConfig(cfg)
 
 	input := &dynamodb.ScanInput{
-		TableName: aws.String("arn:aws:dynamodb:ap-south-1:637423233104:table/PUC-Detection-vehicle-table"),
+		TableName: aws.String(os.Getenv("VEHICLE_TABLE_ARN")),
 	}
 
 	var vehicles []Vehicle
@@ -72,7 +73,7 @@ func UpdateLastCheckDate(vehicle Vehicle) error {
 
 	log.Println("REG NO : ", vehicle.RegNo)
 	input := &dynamodb.UpdateItemInput{
-		TableName: aws.String("arn:aws:dynamodb:ap-south-1:637423233104:table/PUC-Detection-vehicle-table"),
+		TableName: aws.String(os.Getenv("VEHICLE_TABLE_ARN")),
 		Key: map[string]types.AttributeValue{
 			"reg_no": &types.AttributeValueMemberS{Value: vehicle.RegNo},
 		},
