@@ -27,6 +27,7 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		log.Println("Error in unmarshalling data : ", err)
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: http.StatusInternalServerError}, nil
 	}
+	log.Println("Response")
 
 	vehicles, err := service.FetchVehicles(data.Officename)
 	if err != nil {
