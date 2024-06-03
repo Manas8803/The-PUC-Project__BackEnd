@@ -90,7 +90,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    roles.CreateVRCHandlerRole(stack, vehicle_table),
+		Role:    roles.CreateFetchVehicleHandlerRole(stack, vehicle_table),
 		Environment: &map[string]*string{
 			"REGION":            jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),

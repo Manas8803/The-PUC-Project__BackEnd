@@ -64,6 +64,36 @@ func CreateVRCHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
 	}))
 	return role
 }
+func CreateFetchVehicleHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
+	role := awsiam.NewRole(stack, jsii.String("Fetch-Vehicle-Lambda-Role"), &awsiam.RoleProps{
+		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
+	})
+
+	role.AddToPolicy(awsiam.NewPolicyStatement(&awsiam.PolicyStatementProps{
+		Actions: &[]*string{
+			jsii.String("logs:CreateLogGroup"),
+			jsii.String("logs:PutLogEvents"),
+			jsii.String("logs:DescribeLogStreams"),
+			jsii.String("logs:CreateLogStream"),
+			jsii.String("dynamodb:BatchGet*"),
+			jsii.String("dynamodb:DescribeStream"),
+			jsii.String("dynamodb:DescribeTable"),
+			jsii.String("dynamodb:Get*"),
+			jsii.String("dynamodb:Query"),
+			jsii.String("dynamodb:Scan"),
+			jsii.String("dynamodb:BatchWrite*"),
+			jsii.String("dynamodb:CreateTable"),
+			jsii.String("dynamodb:Delete*"),
+			jsii.String("dynamodb:Update*"),
+			jsii.String("dynamodb:PutItem"),
+		},
+		Resources: &[]*string{
+			jsii.String(*db.TableArn()),
+			jsii.String("*"),
+		},
+	}))
+	return role
+}
 func CreateRegReminderHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
 	role := awsiam.NewRole(stack, jsii.String("DB-Lambda-Role"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
