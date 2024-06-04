@@ -16,6 +16,7 @@ type Payload struct {
 }
 type Response struct {
 	Message  string            `json:"message"`
+	Hits     int               `json:"hits"`
 	Vehicles []service.Vehicle `json:"vehicles"`
 }
 
@@ -35,6 +36,7 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 
 	resp := Response{
 		Message:  "Successfully fetched vehicles from DB",
+		Hits:     len(vehicles),
 		Vehicles: vehicles,
 	}
 
