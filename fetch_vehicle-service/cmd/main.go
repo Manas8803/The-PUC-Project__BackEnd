@@ -40,8 +40,6 @@ func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.API
 		Vehicles: vehicles,
 	}
 
-	log.Println(resp)
-
 	respBytes, err := json.Marshal(resp)
 	if err != nil {
 		log.Println("Error in marshalling response : ", err)
