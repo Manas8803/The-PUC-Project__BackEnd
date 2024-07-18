@@ -7,10 +7,11 @@ import (
 	dynamodb "github.com/aws/aws-cdk-go/awscdk/v2/awsdynamodb"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
 	"github.com/aws/jsii-runtime-go"
 )
 
-func CreateOCRHandlerRole(stack awscdk.Stack, handler awslambda.Function) awsiam.Role {
+func CreateOCRHandlerRole(stack awscdk.Stack, log_group awslogs.LogGroup, vrc_handler awslambda.Function, reg_renewal_handler awslambda.Function) awsiam.Role {
 	role := awsiam.NewRole(stack, jsii.String("OCR-Lambda-Role"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 	})
@@ -26,7 +27,9 @@ func CreateOCRHandlerRole(stack awscdk.Stack, handler awslambda.Function) awsiam
 			jsii.String("lambda:InvokeFunction"),
 		},
 		Resources: &[]*string{
-			jsii.String(*handler.FunctionArn()),
+			jsii.String(*vrc_handler.FunctionArn()),
+			jsii.String(*reg_renewal_handler.FunctionArn()),
+			jsii.String(*log_group.LogGroupArn()),
 			jsii.String("*"),
 		},
 	}))
@@ -34,7 +37,7 @@ func CreateOCRHandlerRole(stack awscdk.Stack, handler awslambda.Function) awsiam
 	return role
 }
 
-func CreateVRCHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
+func CreateVRCHandlerRole(stack awscdk.Stack, log_group awslogs.LogGroup, db dynamodb.Table) awsiam.Role {
 	role := awsiam.NewRole(stack, jsii.String("VRC-Lambda-Role"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 	})
@@ -59,12 +62,13 @@ func CreateVRCHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
 		},
 		Resources: &[]*string{
 			jsii.String(*db.TableArn()),
+			jsii.String(*log_group.LogGroupArn()),
 			jsii.String("*"),
 		},
 	}))
 	return role
 }
-func CreateFetchVehicleHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
+func CreateFetchVehicleHandlerRole(stack awscdk.Stack, log_group awslogs.LogGroup, db dynamodb.Table) awsiam.Role {
 	role := awsiam.NewRole(stack, jsii.String("Fetch-Vehicle-Lambda-Role"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 	})
@@ -89,13 +93,14 @@ func CreateFetchVehicleHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam
 		},
 		Resources: &[]*string{
 			jsii.String(*db.TableArn()),
+			jsii.String(*log_group.LogGroupArn()),
 			jsii.String("*"),
 		},
 	}))
 	return role
 }
-func CreateRegReminderHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.Role {
-	role := awsiam.NewRole(stack, jsii.String("DB-Lambda-Role"), &awsiam.RoleProps{
+func CreateRegReminderHandlerRole(stack awscdk.Stack, log_group awslogs.LogGroup, db dynamodb.Table, vrc_handler awslambda.Function) awsiam.Role {
+	role := awsiam.NewRole(stack, jsii.String("Reg_Reminder-Lambda-Role"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 	})
 
@@ -116,9 +121,12 @@ func CreateRegReminderHandlerRole(stack awscdk.Stack, db dynamodb.Table) awsiam.
 			jsii.String("dynamodb:Delete*"),
 			jsii.String("dynamodb:Update*"),
 			jsii.String("dynamodb:PutItem"),
+			jsii.String("lambda:InvokeFunction"),
 		},
 		Resources: &[]*string{
 			jsii.String(*db.TableArn()),
+			jsii.String(*vrc_handler.FunctionArn()),
+			jsii.String(*log_group.LogGroupArn()),
 			jsii.String("*"),
 		},
 	}))
@@ -137,13 +145,14 @@ func CreateScheduler_InvokeRole(stack awscdk.Stack, invoke_handler awslambda.Fun
 		},
 		Resources: &[]*string{
 			invoke_handler.FunctionArn(),
+			jsii.String("*"),
 		},
 	}))
 
 	return role
 }
 
-func CreateRegExpCronJobRole(stack awscdk.Stack, invoke_handler awslambda.Function, db dynamodb.Table) awsiam.Role {
+func CreateRegExpCronJobRole(stack awscdk.Stack, log_group awslogs.LogGroup, invoke_handler awslambda.Function, db dynamodb.Table) awsiam.Role {
 	role := awsiam.NewRole(stack, jsii.String("RegExCronJobRole-Lambda-Role"), &awsiam.RoleProps{
 		AssumedBy: awsiam.NewServicePrincipal(jsii.String("lambda.amazonaws.com"), &awsiam.ServicePrincipalOpts{}),
 	})
@@ -170,6 +179,7 @@ func CreateRegExpCronJobRole(stack awscdk.Stack, invoke_handler awslambda.Functi
 		Resources: &[]*string{
 			jsii.String(*invoke_handler.FunctionArn()),
 			jsii.String(*db.TableArn()),
+			jsii.String(*log_group.LogGroupArn()),
 			jsii.String("*"),
 		},
 	}))

@@ -67,7 +67,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    roles.CreateVRCHandlerRole(stack, vehicle_table),
+		Role:    roles.CreateVRCHandlerRole(stack, logGroup_vrc, vehicle_table),
 		Environment: &map[string]*string{
 			"REGION":               jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"API_KEY":              jsii.String(os.Getenv("API_KEY")),
@@ -90,7 +90,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    roles.CreateFetchVehicleHandlerRole(stack, vehicle_table),
+		Role:    roles.CreateFetchVehicleHandlerRole(stack, logGroup_fetch_vehicle, vehicle_table),
 		Environment: &map[string]*string{
 			"REGION":            jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),
@@ -121,7 +121,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    roles.CreateRegExpCronJobRole(stack, vrc_handler, vehicle_table),
+		Role:    roles.CreateRegExpCronJobRole(stack, logGroup_reg_ex, vrc_handler, vehicle_table),
 		Environment: &map[string]*string{
 			"REGION":            jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"VEHICLE_TABLE_ARN": jsii.String(*vehicle_table.TableArn()),
@@ -145,7 +145,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    roles.CreateRegReminderHandlerRole(stack, vehicle_table),
+		Role:    roles.CreateRegReminderHandlerRole(stack, logGroup_reg, vehicle_table, vrc_handler),
 		Environment: &map[string]*string{
 			"REGION":            jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"VRC_HANDLER_ARN":   jsii.String(*vrc_handler.FunctionArn()),
@@ -167,7 +167,7 @@ func NewPucDetectionStack(scope constructs.Construct, id string, props *PucDetec
 		Runtime: awslambda.Runtime_PROVIDED_AL2023(),
 		Handler: jsii.String("main"),
 		Timeout: awscdk.Duration_Seconds(jsii.Number(10)),
-		Role:    roles.CreateOCRHandlerRole(stack, vrc_handler),
+		Role:    roles.CreateOCRHandlerRole(stack, logGroup_ocr, vrc_handler, reg_renewal_reminder_handler),
 		Environment: &map[string]*string{
 			"REGION":          jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
 			"REG_RENEWAL_ARN": jsii.String(*reg_renewal_reminder_handler.FunctionArn()),
