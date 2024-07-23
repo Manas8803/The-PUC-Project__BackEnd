@@ -8,7 +8,7 @@ The backend is built on a microservices architecture deployed on AWS, utilizing 
 
 Key components:
 
-- **Golang**: Main programming language for backend logic
+- **Golang**: Main programming language for backend logic 
 - **AWS Lambda**: Serverless compute for running backend functions
 - **AWS DynamoDB**: NoSQL database for storing PUC certificate data
 - **AWS Textract**: OCR service for extracting vehicle registration numbers from images
@@ -19,12 +19,12 @@ Key components:
 
 Our backend consists of several microservices:
 
-1. Auth Service
-2. OCR Service
-3. VRC Service
-4. Registration Renewal Reminder Service
-5. Fetch Vehicle Service
-6. Registration Expiration Job Service
+   1. Auth Service
+   2. OCR Service
+   3. VRC Service
+   4. Registration Renewal Reminder Service
+   5. Fetch Vehicle Service
+   6. Registration Expiration Job Service
 
 ## Setup and Configuration
 
